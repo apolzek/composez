@@ -1,0 +1,30 @@
+[
+    {
+        "name": "httpbin",
+        "listen": "[::]:8800",
+        "upstream": "httpbin.org:443",
+        "enabled": true,
+        "toxics": [
+            {
+                "name": "latency",
+                "type": "latency",
+                "stream": "downstream",
+                "attributes": {
+                    "latency": 1000
+                }
+            }
+        ]
+    },
+    {
+        "name": "mockbin",
+        "listen": "[::]:8801",
+        "upstream": "mockbin.org:443",
+        "enabled": true
+    },
+    {
+        "name": "jsonplaceholder",
+        "listen": "[::]:8802",
+        "upstream": "jsonplaceholder.typicode.com:443",
+        "enabled": true
+    }
+]
