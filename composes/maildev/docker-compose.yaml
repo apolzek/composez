@@ -6,16 +6,6 @@ services:
         extra_hosts: [ 'host.docker.internal:host-gateway' ]
         restart: always
         ports:
-            - 80:80
+            - "80:80"
             - "25:25" # quotes are needed because of a bug in the yml parser
 
-# curl --url 'smtp://localhost:25' \
-#   --mail-from 'seu_email@gmail.com' \
-#   --mail-rcpt 'destinatario@example.com' \
-#   --upload-file - <<END
-# From: seu_email@gmail.com
-# To: destinatario@example.com
-# Subject: Assunto do e-mail
-
-# Corpo do e-mail.
-# END

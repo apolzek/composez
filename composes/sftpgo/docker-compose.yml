@@ -1,0 +1,36 @@
+version: "3.0"
+
+services:
+    sftpgo:
+        image: drakkan/sftpgo:v2.5.4-alpine
+        container_name: sftpgo
+        # Peer-facing ports
+        expose:
+            - "1111/tcp"
+            - "2222/tcp"
+ 
+        environment:
+            # Proxy Protocol
+            - "SFTPGO_COMMON__PROXY_PROTOCOL=2"
+            - "SFTPGO_COMMON__PROXY_ALLOWED=0.0.0.0"
+ 
+            # SFTP
+            - "SFTPGO_SFTPD__BINDINGS__0__PORT=1111"
+            - "SFTPGO_SFTPD__BINDINGS__0__PROXY_ALLOWED=0.0.0.0"
+ 
+            # HTTP
+            - "SFTPGO_HTTPD__BINDINGS__0__PORT=2222"
+            - "SFTPGO_HTTPD__BINDINGS__0__PROXY_ALLOWED=0.0.0.0"
+ 
+            - "SFTPGO_COMMON__DEFENDER__ENABLED=true"
+            - "SFTPGO_COMMON__DEFENDER__BAN_TIME=30"
+            - "SFTPGO_COMMON__DEFENDER__BAN_TIME_INCREMENT=50"
+            - "SFTPGO_COMMON__DEFENDER__THRESHOLD=15"
+            - "SFTPGO_COMMON__DEFENDER__OBSERVATION_TIME=30"
+ 
+        volumes:
+            - /opt/containers/sftpgo/data:/srv/sftpgo/data
+            - /opt/containers/sftpgo/backups:/srv/sftpgo/backups
+            - /opt/containers/sftpgo/config:/var/lib/sftpgo
+
+        restart: unless-stopped

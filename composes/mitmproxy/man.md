@@ -1,0 +1,1 @@
+curl --proxy http://localhost:8080 http://google.com

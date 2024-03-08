@@ -11,7 +11,7 @@ def find_docker_compose_files(directory):
     return docker_compose_files
 
 def generate_readme(directory):
-    readme_content = "# Docker Compose Services\n\nEste arquivo foi gerado automaticamente.\n\n"
+    readme_content = "# Docker Compose Services\n\nThis file was generated automatically\n\n"
     docker_compose_files = find_docker_compose_files(directory)
     for file in docker_compose_files:
         folder_name = os.path.basename(os.path.dirname(file))
@@ -30,12 +30,11 @@ def generate_readme(directory):
                 ports_str = [str(port) for port in ports]
                 services.append({"name": service_name, "ports": ports_str})
             services_json = json.dumps({"services": services}, indent=2)
-            # Adiciona o JSON ao README.md
             readme_content += "```json\n"
             readme_content += services_json + "\n"
             readme_content += "```\n\n"
 
-    with open('README.md', 'w') as f:
+    with open('composes.md', 'w') as f:
         f.write(readme_content)
 
 directory = 'composes/'
