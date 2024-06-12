@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: dbre
+      POSTGRES_PASSWORD: pass@123
+      POSTGRES_DB: app_db
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_EXTENSIONS: "pg_stat_statements"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - monitoring
+    cpus: 0.5
+    mem_limit: 1000m 
+
+  postgres_exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: postgresql://dbre:pass@123@postgres:5432/app_db?sslmode=disable
+    ports:
+      - "9187:9187"
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - "--storage.tsdb.retention.time=7d"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    restart: always
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
